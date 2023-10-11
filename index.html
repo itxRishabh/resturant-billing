@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Restaurant Billing System</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #333;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #ffcc29;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .footer {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Restaurant Billing System</h1>
+        <input type="text" id="item" placeholder="Item Name">
+        <input type="number" id="price" placeholder="Item Price">
+        <button id="add-item">Add Item</button>
+        <ul id="order-list"></ul>
+        <p>Total Amount: $<span id="total-amount">0.00</span></p>
+        <button id="print-bill">Print Bill</button>
+    </div>
+
+    <div class="footer">
+        <p>Developed solely by itxrishabh</p>
+        <p>If you want to buy this system at an affordable price, please <a href="contact.html">contact me</a>.</p>
+    </div>
+
+    <script>
+        const itemInput = document.getElementById('item');
+        const priceInput = document.getElementById('price');
+        const addItemButton = document.getElementById('add-item');
+        const orderList = document.getElementById('order-list');
+        const totalAmount = document.getElementById('total-amount');
+        const printBillButton = document.getElementById('print-bill');
+        let orderTotal = 0;
+
+        addItemButton.addEventListener('click', function () {
+            const item = itemInput.value.trim();
+            const price = parseFloat(priceInput.value);
+
+            if (item && !isNaN(price) && price > 0) {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${item}: $${price.toFixed(2)}`;
+                orderList.appendChild(listItem);
+
+                orderTotal += price;
+                totalAmount.textContent = orderTotal.toFixed(2);
+
+                itemInput.value = '';
+                priceInput.value = '';
+            }
+        });
+
+        printBillButton.addEventListener('click', function () {
+            const printWindow = window.open('', '', 'width=600,height=600');
+            printWindow.document.open();
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Restaurant Bill</title>
+                </head>
+                <body>
+                    <h2>Order Summary</h2>
+                    <ul>
+                        ${orderList.innerHTML}
+                    </ul>
+                    <p>Total Amount: $<span>${orderTotal.toFixed(2)}</span></p>
+                    <p>Developed solely by itxrishabh</p>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        });
+    </script>
+</body>
+</html>
